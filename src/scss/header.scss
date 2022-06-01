@@ -1,0 +1,139 @@
+.excel__header {
+    position: absolute;
+    top: 0;
+    right: 0;
+    left: 0;
+    height: $header-height;
+    padding: 10px 14px 0;
+
+    display: flex;
+    justify-content: space-between;
+
+    & .logo {
+        cursor: pointer;
+    }
+
+    & .input {
+        margin-left: 10px;
+        padding-left: 10px;
+        padding-right: 10px;
+        padding-top: 4px;
+
+        text-align: center;
+     
+        min-width: 25px;
+        max-width: 300px;
+       
+        color: #888;
+        background-color: white;
+        border: 1px solid transparent;
+        border-radius: 4px;
+        height: 30px;
+        
+        font-size: 18px;
+        outline: none;
+
+        &:hover {
+            border: 1px solid $border-color;
+        }
+
+        &:focus {
+            border: 2px solid #1a73e8;
+            color: #000;
+            padding-top: 3px;
+        }
+    }
+
+    & .star {
+        margin-top: 2px;
+        margin-left: 5px;
+        @include icon(rgb(255, 174, 0), 22px);
+    }
+
+    & .panel_items {
+        margin-top: 5px;
+        margin-left: 15px;
+        padding: 0;
+        list-style-type: none;
+
+        display: flex;
+        flex-direction: row;
+        justify-content: space-around;
+
+        & li {
+            position: relative;
+            
+            & .panel_item {
+                
+                @include button();
+
+                &:active {
+                    background-color: $active-bg;
+                }
+            }
+
+            & .panel_menu {
+                list-style-type: none;
+                position: absolute;
+                top: 22px;
+                background-color: #fff;
+                box-shadow: 0px 0px 10px $border-color;
+                border-radius: 5px;
+                border-top-left-radius: 0px;
+                z-index: 1100;
+                padding-top: 10px;
+                padding-bottom: 10px;
+
+                width: 280px;
+
+                & li {
+                    cursor: pointer;
+                    padding-left: 10px;
+                    padding-right: 10px;
+                    padding-top: 5px;
+                    padding-bottom: 5px;
+
+                    &:hover {
+                        background-color: $hover-background;
+                    }
+
+                    &:active {
+                        background-color: $active-select-item;
+                    }
+                }
+
+                & .material-icons {
+                    color: rgba(0,0,0,.7);
+                    font-size: 20px;
+                }
+
+                & .panel_menu-item {
+                    font-size: 14px;
+                    color: $buttons-color;
+                    padding-top: 3px;
+                    padding-left: 5px;
+                }
+            }
+
+            & .panel_menu.hide {
+                display: none;
+            }
+        }
+    }
+
+    & .events {
+        @include icon(green);
+
+        &:last-child {
+            @include icon(#ff0000); 
+
+            &:active {
+                background-color: #fce5cd;
+            }
+        }
+
+        &:active {
+            background-color: $active-bg;
+        }
+    }
+}

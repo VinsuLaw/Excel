@@ -1,0 +1,95 @@
+@import "_select";
+
+.excel__toolbar {
+    position: absolute;
+    top: $header-height;
+    right: 0;
+    left: 0;
+    height: $toolbar-height;
+    
+
+    padding-top: 5px;
+    padding-bottom: 5px;
+    padding-left: 30px;
+    padding-right: 30px;
+
+    border-top: 1px solid $border-color;
+    border-bottom: 1px solid $border-color;
+
+    display: flex;
+    justify-content: space-between;
+
+    & .file {
+        margin-right: 10px;
+        padding-right: 10px;
+        border-right: 1px solid $border-color;
+        display: flex;
+
+        & .material-icons {
+            @include icon(green, 20px, 5px);
+            color: rgba(0,0,0,.6);
+            margin-right: 3px;
+
+            &:active {
+                background-color: $active-bg;
+            }
+
+            &:last-child {
+                margin-right: 0px;
+            }
+        }
+    }
+
+    & .text-format {
+        margin-right: 10px;
+        padding-right: 10px;
+        border-right: 1px solid $border-color;
+
+        & .btn {
+            @include icon(green, 20px, 5px);
+            margin-right: 5px;
+
+            &:last-child {
+                @include icon(green, 22px, 3px);
+                margin-right: 0px;
+
+                &:active {
+                    background-color: $active-bg;
+                }
+            }
+
+            &:active {
+                background-color: $active-bg;
+            }
+        }
+
+        & .material-icons {
+            font-size: 20px;
+        }
+
+        & .select {
+            margin-right: 5px;
+        }
+    }
+
+    & .scale {
+        margin-right: 10px;
+        padding-right: 10px;
+        border-right: 1px solid $border-color;
+    }
+
+    & .font-types {
+        margin-right: 10px;
+        border-right: 1px solid $border-color;
+        padding-right: 10px;
+    }
+
+    & .fonts {
+        padding-right: 10px;
+        border-right: 1px solid $border-color;
+    }
+
+    & .sizes {
+        margin-left: 10px;
+    }
+}

@@ -1,0 +1,62 @@
+@mixin icon($focusColor: green, $fontSize: 22px, $paddings: 3px) {
+    font-size: $fontSize;
+    height: 28px;
+    border-radius: 3px;
+    padding: $paddings;
+    text-align: center;
+    position: relative;
+    display: inline-block;
+    color: rgba(0,0,0,.7);
+
+    &:active, &.active {
+        color: $focusColor;
+    }
+
+    &:hover {
+        background: #eee;
+        cursor: pointer;
+    }
+}
+
+@mixin button($color: #202124) {
+    border-radius: 4px;
+    text-align: center;
+    padding: 5px 8px;
+    letter-spacing: .2px;
+   
+    font-size: 14px;
+    color: $color;
+
+    &:active, &.active {
+        color: green;
+    }
+
+    &:hover {
+        background: #eee;
+        cursor: pointer;
+    }
+}
+
+@mixin paletteColor($bg-color, $borderColor) {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background-color: $bg-color;
+    cursor: pointer;
+    margin-bottom: 3px;
+    margin-right: 3px;
+  //  text-align: center;
+
+    @if ($borderColor == 'true') {
+        border: 1px solid $border-color;
+    }
+
+    &:last-child {
+        margin-bottom: 0px;
+        margin-right: 0px;
+    }
+
+    &:hover {
+        box-shadow: 0px 0px 5px $buttons-color;
+    }
+}
