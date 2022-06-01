@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon" href="favicon.ico">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <title>Table</title>
+</head>
+<body>
+    <div id="app">
+
+        <div class="excel">
+
+            <div class="excel__header">
+                
+                <div class="row">
+                    <a href="#" class="logo">
+                        <img src="./img/sheets_doc.png" alt="">
+                    </a>
+                    
+                    <div class="column">
+                        <div class="row">
+                            <div class="input" contenteditable="true">Table name</div>
+                            <span class="material-icons star">star_border</span>
+                        </div>
+                        <ul class="panel_items">
+                            <li>
+                                <span class="panel_item">File</span>   
+                                <ul class="panel_menu hide">
+                                    <li class="row">
+                                        <span class="material-icons">folder_open</span>
+                                        <span class="panel_menu-item">New file</span> 
+                                    </li>
+                                    <li class="row">
+                                        <span class="material-icons">folder_open</span>
+                                        <span class="panel_menu-item">Open file</span> 
+                                    </li>
+                                </ul>
+                            </li>
+                            <li>
+                                <span class="panel_item">Edit</span>   
+                                <ul class="panel_menu hide">
+                                    <li class="row">
+                                        <span class="material-icons">folder_open</span>
+                                        <span class="panel_menu-item">New file</span> 
+                                    </li>
+                                    <li class="row">
+                                        <span class="material-icons">folder_open</span>
+                                        <span class="panel_menu-item">Open file</span> 
+                                    </li>
+                                </ul>
+                            </li>
+                            <li>
+                                <span class="panel_item">View</span>   
+                                <ul class="panel_menu hide">
+                                    <li class="row">
+                                        <span class="material-icons">folder_open</span>
+                                        <span class="panel_menu-item">New file</span> 
+                                    </li>
+                                    <li class="row">
+                                        <span class="material-icons">folder_open</span>
+                                        <span class="panel_menu-item">Open file</span> 
+                                    </li>
+                                </ul>
+                            </li>
+                            <li>
+                                <span class="panel_item">Insert</span>   
+                                <ul class="panel_menu hide">
+                                    <li class="row">
+                                        <span class="material-icons">folder_open</span>
+                                        <span class="panel_menu-item">New file</span> 
+                                    </li>
+                                    <li class="row">
+                                        <span class="material-icons">folder_open</span>
+                                        <span class="panel_menu-item">Open file</span> 
+                                    </li>
+                                </ul>
+                            </li>
+                            <li>
+                                <span class="panel_item">Format</span>   
+                                <ul class="panel_menu hide">
+                                    <li class="row">
+                                        <span class="material-icons">folder_open</span>
+                                        <span class="panel_menu-item">New file</span> 
+                                    </li>
+                                    <li class="row">
+                                        <span class="material-icons">folder_open</span>
+                                        <span class="panel_menu-item">Open file</span> 
+                                    </li>
+                                </ul>
+                            </li>
+                            <li>
+                                <span class="panel_item">Help</span>   
+                            </li>
+                        </ul>
+                    </div>
+                </div>    
+                
+                <div class="row">
+                    <span class="material-icons events">save</span>
+                    <span class="material-icons events">exit_to_app</span>
+                </div>
+              
+            </div>
+
+            <div class="excel__toolbar">
+                <div class="row">
+                    <div class="file">
+                        <span class="material-icons">undo</span>
+                        <span class="material-icons">redo</span>
+                        <span class="material-icons">print</span>
+                        <span class="material-icons">format_paint</span>
+                    </div>
+                    <div class="scale">
+                        <div class="select">
+                            <div class="select-label">
+                                <span class="selected border-right">100%</span>
+                                <span class="material-icons">expand_more</span>
+                            </div>
+                            <ul class="selection hide">
+                                <li>50%</li>
+                                <li>75%</li>
+                                <li>90%</li>
+                                <li>100%</li>
+                                <li>125%</li>
+                                <li>150%</li>
+                                <li>200%</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="font-types row">
+                        <div class="fonts">
+                            <div class="select">
+                                <div class="select-label">
+                                    <span class="selected">Roboto</span>
+                                    <span class="material-icons">expand_more</span>
+                                </div>
+                                <ul class="selection w150 hide">
+                                    <li>Arial</li>
+                                    <li>Caveat CaveatCaveat</li>
+                                    <li>Roboto</li>
+                                    <li>Comfortaa</li>
+                                    <li>Impact</li>
+                                    <li>Lora</li>
+                                    <li>Verdana</li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="sizes">
+                            <div class="select">
+                                <div class="select-label">
+                                    <input class="selected_input" value="10" />
+                                    <span class="material-icons">expand_more</span>
+                                </div>
+                                <ul class="selection hide">
+                                    <li>5</li>
+                                    <li>10</li>
+                                    <li>14</li>
+                                    <li>18</li>
+                                    <li>24</li>
+                                    <li>30</li>
+                                    <li>60</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="file">
+                        <span class="material-icons">format_bold</span>
+                        <span class="material-icons">format_italic</span>
+                        <span class="material-icons">strikethrough_s</span>
+                        <div class="select_color">
+                            <span class="material-icons parent">format_color_text</span>
+                            <div class="selection hide">
+                                <div class="palette">
+                                    <div class="black"></div>
+                                    <div class="dark-grey-1"></div>
+                                    <div class="dark-grey-2"></div>
+                                    <div class="dark-grey-3"></div>
+                                    <div class="dark-grey-4"></div>
+                                    <div class="grey"></div>
+                                    <div class="light-grey-1"></div>
+                                    <div class="light-grey-2"></div>
+                                    <div class="light-grey-3"></div>
+                                    <div class="white"></div>
+
+                                    <div class="vinous"></div>
+                                    <div class="red"></div>
+                                    <div class="orange"></div>
+                                    <div class="yellow"></div>
+                                    <div class="light-green"></div>
+                                    <div class="turquoise"></div>
+                                    <div class="blue"></div>
+                                    <div class="dark-blue"></div>
+                                    <div class="purple"></div>
+                                    <div class="light-purple"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="text-format row">
+                        <div class="select_color">
+                            <span class="material-icons btn parent">format_color_fill</span>
+                            <div class="selection hide">
+                                <div class="palette">
+                                    <div class="black"></div>
+                                    <div class="dark-grey-1"></div>
+                                    <div class="vinous"></div>
+                                    <div class="red"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="select">
+                            <div class="select-label_icon">
+                                <span class="material-icons selected">format_align_left</span>
+                                <span class="material-icons">expand_more</span>
+                            </div>
+                            <ul class="selection_icon row hide">
+                                <li><span class="material-icons">format_align_left</span></li>
+                                <li><span class="material-icons">format_align_center</span></li>
+                                <li><span class="material-icons">format_align_right</span></li>
+                            </ul>
+                        </div>
+                        <div class="select">
+                            <div class="select-label_icon">
+                                <span class="material-icons selected">vertical_align_bottom</span>
+                                <span class="material-icons">expand_more</span>
+                            </div>
+                            <ul class="selection_icon row hide">
+                                <li><span class="material-icons">vertical_align_bottom</span></li>
+                                <li><span class="material-icons">vertical_align_center</span></li>
+                                <li><span class="material-icons">vertical_align_top</span></li>
+                            </ul>
+                        </div>
+                        <span class="material-icons btn">link</span>
+                        
+                    </div>
+                   
+
+                </div>
+            </div>
+
+            <div class="excel__formula">
+                <span>fx</span>
+                <div class="fx_input" contenteditable="true"></div>
+            </div>
+
+            <div class="excel__table">
+                <div class="table_row">
+                    <div class="row-info"></div>
+                    <div class="row-data">
+                        <div class="table_col">A</div>
+                        <div class="table_col">B</div>
+                        <div class="table_col">C</div>
+                    </div>
+                </div>
+
+                <div class="table_row">
+                    <div class="row-info">1</div>
+                    <div class="row-data">
+                        <div class="cell selected" contenteditable="true">a1</div>
+                        <div class="cell">a2</div>
+                        <div class="cell">a3</div>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- After 1.0 ver
+            <div class="excel__footer"></div>
+            -->
+
+        </div>
+
+    </div>
+</body>
+</html>
