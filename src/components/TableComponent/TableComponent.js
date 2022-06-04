@@ -1,5 +1,6 @@
 import { ExcelComponent } from "../ExcelComponent";
-import { createTable } from "./TableTemplate";
+import { createTable } from "./table.template";
+import { resizeTable, shouldResize } from "./table.resize";
 
 export class TableComponent extends ExcelComponent {
     static PARENT_NODE = 'excel__table'
@@ -7,7 +8,7 @@ export class TableComponent extends ExcelComponent {
     constructor($root) {
         super($root, {
             name: 'Table',
-            listeners: ['click', 'input']
+            listeners: ['click', 'input', 'mousedown', 'mousemove', 'mouseup']
         })
         this.$root = $root
     }
@@ -16,8 +17,22 @@ export class TableComponent extends ExcelComponent {
         return createTable(20)
     }
 
-    onClick() {
-        console.log('Table component click');
+    onClick(event) {
+        
+    }
+
+    onMousedown(event) {
+        if (shouldResize(event)) {
+            resizeTable(this.$root, event)
+        }
+    }
+
+    onMousemove(event) {
+        console.log('mousemove');
+    }
+
+    onMouseup(event) {
+        this.$root.off('mousemove', this.onMousemove)
     }
 
     onInput() {
