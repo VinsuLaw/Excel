@@ -10,16 +10,20 @@ function toChar(_, index) {
 
 function toColumn(col, index) {
     return `
-        <div class="table_col" data-col="${index}">
-            ${col}
+        <div class="table_col" data-col="${index}" data-type="resizable">
+            ${col} 
+            <div class="col-resize" data-resize="col"></div>
         </div>
     `
 }
 
 function createRow(idx, content) {
     return `
-        <div class="table_row">
-            <div class="row-info">${idx || ''}</div>
+        <div class="table_row" data-type="resizable">
+            <div class="row-info">
+                ${idx || ''}
+                ${idx > 0 ? '<div class="row-resize" data-resize="row"></div>' : ''}
+            </div>
             <div class="row-data">${content}</div>
         </div>
     `
@@ -27,7 +31,7 @@ function createRow(idx, content) {
 
 function toCell(row, col) {
     return `
-        <div class="cell" contenteditable="true"></div>
+        <div class="cell" contenteditable="true" data-col="${col}"></div>
     `
 }
 
