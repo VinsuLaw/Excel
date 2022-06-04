@@ -16,7 +16,7 @@ function jsLoaders() {
             options: {
                 presets: ['@babel/preset-env']
             }
-        }
+        },
     ]
 
     if (isDev) {
@@ -99,7 +99,11 @@ module.exports = {
                         }
                     }
                 }
-            } 
+            },
+            {
+                test: /\.(png|jpg|jpeg|svg)$/,
+                use: ['file-loader']
+            }
         ],
     }
 }
