@@ -74,6 +74,20 @@ class DOM {
     insertHTML(position, html) {
         this.$el.insertAdjacentElement(position, html)
     }
+
+    text(text) {
+        if (typeof text === 'string') {
+            this.$el.textContent = text
+            return this
+        }
+
+        return this.$el.textContent.trim()
+    }
+
+    focus() {
+        this.$el.focus()
+        return this
+    }
 }
 
 export function $(selector) {

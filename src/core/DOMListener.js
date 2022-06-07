@@ -12,7 +12,7 @@ export class DOMListener {
 
     initListeners() {
         this.listeners.forEach(listener => {
-            const method = utils.getMethodName(listener) // Ex: getMethodName(click) => 'onClick'
+            const method = utils.getMethodName(listener)
             if (!this[method]) {
                 throw new Error(`Method ${method} is not implemented in ${this.name || ''} Component`)
             }

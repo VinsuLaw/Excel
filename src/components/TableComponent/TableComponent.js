@@ -1,19 +1,36 @@
 import { ExcelComponent } from "../ExcelComponent";
 import { createTable } from "./table.template";
 import { resizeTable, shouldResize } from "./table.resize";
-import { mouseSelection, nextCell, onClickSelect, selectByKeys, shouldSelect } from "./table.selection";
 import { $ } from "../../core/DOM";
+import { TableSelection } from "./TableSelection";
 
 export class TableComponent extends ExcelComponent {
     static PARENT_NODE = 'excel__table'
 
-    constructor($root) {
+    constructor($root, options) {
         super($root, {
             name: 'Table',
-            listeners: ['click', 'input', 'mousedown', 'mouseup', 'scroll', 'keydown']
+            listeners: ['click', 'input', 'mousedown', 'mouseup', 'scroll', 'keydown'],
+            ...options
         })
         this.$root = $root
         this.rowsCount = 20
+        this.selection = new TableSelection(this.$root, this.rowsCount, options)
+    }
+
+    init() {
+        super.init()
+
+        const $cell = $(this.$root.findElement(`[data-col="0:0"]`))
+        this.selection.select($cell)
+        
+        this.$on('formula:input', (text) => {
+            this.selection.current.text(text)
+        })
+
+        this.$on('formula:done', () => {
+            this.selection.current.focus()
+        })
     }
 
     render() {
@@ -21,7 +38,7 @@ export class TableComponent extends ExcelComponent {
     }
 
     onClick(event) {
-        event.target.dataset.cell ? onClickSelect(event, this.$root) : null
+        event.target.dataset.cell ? this.selection.onClickSelect(event) : null
     }
 
     onMousedown(event) {
@@ -30,8 +47,8 @@ export class TableComponent extends ExcelComponent {
             resizeTable(this.$root, event, this.rowsCount)
         }
 
-        if (shouldSelect(event)) {
-            mouseSelection(this.$root, event)
+        if (this.selection.shouldSelect(event)) {
+            this.selection.mouseSelection(event)
         }
     }
 
@@ -43,15 +60,22 @@ export class TableComponent extends ExcelComponent {
         this.$root.off('mousemove', this.onMousemove)
     }
 
-    onInput() {
-        console.log('Table component input');
+    onInput(event) {
+        this.$emit('table:input', $(event.target).text())
     }
 
     onKeydown(event) {
         const keysEvents = ['Enter', 'Tab', 'ArrowLeft', 'ArrowRight', 'ArrowDown', 'ArrowUp']
         if (keysEvents.includes(event.key) && event.shiftKey) {
             event.preventDefault()
-            selectByKeys(event, this.$root)
+            if (this.selection.current != null) {
+                this.selection.selectByKeys(event, true)
+            }
+        } else if (keysEvents.includes(event.key) && event.ctrlKey) {
+            event.preventDefault()
+            if (this.selection.current != null) {
+                this.selection.selectByKeys(event, false)
+            }
         }
     }
 
