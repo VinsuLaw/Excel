@@ -4,7 +4,7 @@ export function shouldResize(event) {
     return event.target.dataset.resize
 }
 
-export function resizeTable($root, event) {
+export function resizeTable($root, event, rowsCount) {
     const $resizer = $(event.target)
     const $parent = $resizer.closest('[data-type="resizable"]')
     const coords = $parent.getCoords()
@@ -28,10 +28,14 @@ export function resizeTable($root, event) {
 
     document.onmouseup = () => {
         document.onmousemove = null
+        const rows = 20
 
         if (type === 'col') {
             $parent.css({width: value + 'px'})
-            const all = $root.findAll(`[data-col="${$parent.$el.dataset.col}"]`).forEach(el => el.style.width = value + 'px')
+            for (let row = 0; row < rowsCount; row++) {
+                const cell = $root.findElement(`[data-col="${row}:${$parent.$el.dataset.col}"]`)
+                cell.style.width = value + 'px'
+            }
         } else {
             $parent.css({height: value + 'px'})
         }

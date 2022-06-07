@@ -1,0 +1,13 @@
+#selectFrame {
+    width: 0;
+    height: 0;
+    line-height: 0;
+    border: 1px dotted #5c6a8e;
+    background-color: #6582c9;
+    position: absolute;
+    z-index: 10000;
+    visibility: hidden;
+  //  -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=40)"; 
+    filter: alpha(opacity=40);
+    opacity: .4;
+}
