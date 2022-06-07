@@ -31,7 +31,7 @@ function createRow(idx, content) {
 
 function toCell(row, col) {
     return `
-        <div class="cell" contenteditable="true" data-col="${col}"></div>
+        <div class="cell" contenteditable="true" data-col="${row}:${col}" data-cell="true"></div>
     `
 }
 
