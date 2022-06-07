@@ -1,29 +1,33 @@
 import { $ } from "../../core/DOM"
+import { ExcelComponent } from "../ExcelComponent"
 
-export class TableSelection {
+export class TableSelection extends ExcelComponent {
     static className = 'selected'
 
-    constructor($root, rowsCount) {
+    constructor($root, rowsCount, options) {
+        super($root, {
+            ...options
+        })
         this.$root = $root
         this.rowsCount = rowsCount
         this.group = []
         this.current = null
     }
 
+    // Select cell
     select($cell) {
         $cell.addClass([TableSelection.className])
+        $cell.focus()
         this.current = $cell
         this.group.push($cell.id())
+        this.$emit('table:select', $cell)
     }
 
-    clearSelections() {
-        this.group.forEach($el => $el.removeClass(TableSelection.className))
-        this.group = []
-    }
-
+    // Selection by one mouse click
     onClickSelect(event) {
         document.onmouseup = null
 
+        // Just disabling all selected cells
         if (!event.shiftKey) {
             if (this.group.length > 0) {
                 this.group.forEach((dataset, index) => {
@@ -34,6 +38,7 @@ export class TableSelection {
             }
         }
 
+        // Disable selected cell if clicked on active cell with hold shift
         if (event.shiftKey) {
             const targetCell = $(event.target)
             if (targetCell.hasClass('selected')) {
@@ -52,21 +57,31 @@ export class TableSelection {
         this.select($cell)
     }
 
-    selectByKeys(event) {
-        console.log(this.current);
+    // Table selection by keybord
+    selectByKeys(event, shift) {
         const targetCell = this.group.at(-1)
-        const parsed = targetCell.split(':')
-        const id = { row: +parsed[0], col: +parsed[1] }
+        const id = this.parseToID(targetCell)
+        if (!shift) {
+            const $cell = $(this.$root.findElement(`[data-col="${targetCell}"]`))
+            $cell.removeClass([TableSelection.className])
+            this.group = []
+        } 
 
         const $next = $(this.$root.findElement(nextCell(event.key, id, this.rowsCount)))
         this.select($next)
-        console.log(this.group);
+    }
+
+    // Get the parsed cell.dataset
+    parseToID(targetCell) {
+        const parsed = targetCell.split(':')
+        return { row: +parsed[0], col: +parsed[1] }
     }
 
     shouldSelect(event) {
         return event.shiftKey
     }
 
+    // Mouse frame-selection
     mouseSelection(event) {
         const leftScrolled = this.$root.leftScrolled
         let mousedown = true
@@ -136,6 +151,7 @@ export class TableSelection {
         }
     }
 
+    // Do selection by frame-selection
     doSelection(x1, y1, x2, y2, leftScrolled) {
         y1 = y1 - 140
         x1 = x1 - 100
@@ -184,6 +200,7 @@ export class TableSelection {
     }
 }
 
+// Get the next cell in `[data-col="${row}:${col}"]` format
 function nextCell(key, {col, row}, rowsCount) {
     const MIN_VALUE = 0
     const MAX_Y_VALUE = rowsCount - 1
@@ -208,6 +225,7 @@ function nextCell(key, {col, row}, rowsCount) {
     return `[data-col="${row}:${col}"]`
 }
 
+// Creating selection frame
 function creatSelectionFrame($root) {
     const selectionFrame = $($root.create('div'))
     selectionFrame.addID('selectFrame')
@@ -215,6 +233,7 @@ function creatSelectionFrame($root) {
     return selectionFrame
 }
 
+// Get mouse coords
 function getCoords(e) { 
     return [e.pageX, e.pageY]
 }

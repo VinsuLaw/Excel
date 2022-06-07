@@ -7,26 +7,30 @@ import { TableSelection } from "./TableSelection";
 export class TableComponent extends ExcelComponent {
     static PARENT_NODE = 'excel__table'
 
-    constructor($root) {
+    constructor($root, options) {
         super($root, {
             name: 'Table',
-            listeners: ['click', 'input', 'mousedown', 'mouseup', 'scroll', 'keydown']
+            listeners: ['click', 'input', 'mousedown', 'mouseup', 'scroll', 'keydown'],
+            ...options
         })
         this.$root = $root
         this.rowsCount = 20
-        this.selection = new TableSelection(this.$root, this.rowsCount)
+        this.selection = new TableSelection(this.$root, this.rowsCount, options)
     }
-
-    prepare() {}
 
     init() {
         super.init()
 
-        console.log('init');
+        const $cell = $(this.$root.findElement(`[data-col="0:0"]`))
+        this.selection.select($cell)
+        
+        this.$on('formula:input', (text) => {
+            this.selection.current.text(text)
+        })
 
-
-        const cell = $(this.$root.findElement(`[data-col="0:0"]`))
-        this.selection.select(cell)
+        this.$on('formula:done', () => {
+            this.selection.current.focus()
+        })
     }
 
     render() {
@@ -56,8 +60,8 @@ export class TableComponent extends ExcelComponent {
         this.$root.off('mousemove', this.onMousemove)
     }
 
-    onInput() {
-        console.log('Table component input');
+    onInput(event) {
+        this.$emit('table:input', $(event.target).text())
     }
 
     onKeydown(event) {
@@ -65,7 +69,12 @@ export class TableComponent extends ExcelComponent {
         if (keysEvents.includes(event.key) && event.shiftKey) {
             event.preventDefault()
             if (this.selection.current != null) {
-                this.selection.selectByKeys(event)
+                this.selection.selectByKeys(event, true)
+            }
+        } else if (keysEvents.includes(event.key) && event.ctrlKey) {
+            event.preventDefault()
+            if (this.selection.current != null) {
+                this.selection.selectByKeys(event, false)
             }
         }
     }
