@@ -1,8 +1,8 @@
 import { ExcelComponent } from "../ExcelComponent";
 import { createTable } from "./table.template";
 import { resizeTable, shouldResize } from "./table.resize";
-import { mouseSelection, nextCell, onClickSelect, selectByKeys, shouldSelect } from "./table.selection";
 import { $ } from "../../core/DOM";
+import { TableSelection } from "./TableSelection";
 
 export class TableComponent extends ExcelComponent {
     static PARENT_NODE = 'excel__table'
@@ -14,6 +14,19 @@ export class TableComponent extends ExcelComponent {
         })
         this.$root = $root
         this.rowsCount = 20
+        this.selection = new TableSelection(this.$root, this.rowsCount)
+    }
+
+    prepare() {}
+
+    init() {
+        super.init()
+
+        console.log('init');
+
+
+        const cell = $(this.$root.findElement(`[data-col="0:0"]`))
+        this.selection.select(cell)
     }
 
     render() {
@@ -21,7 +34,7 @@ export class TableComponent extends ExcelComponent {
     }
 
     onClick(event) {
-        event.target.dataset.cell ? onClickSelect(event, this.$root) : null
+        event.target.dataset.cell ? this.selection.onClickSelect(event) : null
     }
 
     onMousedown(event) {
@@ -30,8 +43,8 @@ export class TableComponent extends ExcelComponent {
             resizeTable(this.$root, event, this.rowsCount)
         }
 
-        if (shouldSelect(event)) {
-            mouseSelection(this.$root, event)
+        if (this.selection.shouldSelect(event)) {
+            this.selection.mouseSelection(event)
         }
     }
 
@@ -51,7 +64,9 @@ export class TableComponent extends ExcelComponent {
         const keysEvents = ['Enter', 'Tab', 'ArrowLeft', 'ArrowRight', 'ArrowDown', 'ArrowUp']
         if (keysEvents.includes(event.key) && event.shiftKey) {
             event.preventDefault()
-            selectByKeys(event, this.$root)
+            if (this.selection.current != null) {
+                this.selection.selectByKeys(event)
+            }
         }
     }
 

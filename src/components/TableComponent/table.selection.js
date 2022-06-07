@@ -131,7 +131,7 @@ export function mouseSelection($root, event) {
     }
 }
 
-export function onClickSelect(event, $root) {
+export function onClickSelect(event, $root, selection) {
     document.onmouseup = null
 
     if (!event.shiftKey) {
@@ -160,6 +160,7 @@ export function onClickSelect(event, $root) {
     const cell = $root.findElement(`[data-col="${event.target.dataset.col}"]`)
     selectedItems.push(event.target.dataset.col)
     $(cell).addClass(['selected'])
+    selection.select($(cell))
 }
 
 function nextCell(key, {col, row}) {
