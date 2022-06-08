@@ -38,6 +38,11 @@ class DOM {
 
     addClass(classList = []) {
         classList.forEach(element => this.$el.classList.add(element))
+        return this
+    }
+
+    classLists() {
+        return Array.from(this.$el.classList)
     }
 
     addID(ID) {
@@ -53,6 +58,10 @@ class DOM {
             }
         }
         return this.$el.dataset.col
+    }
+
+    dataset(type) {
+        return this.$el.dataset[type]
     }
 
     removeClass(classList = []) {
@@ -72,7 +81,11 @@ class DOM {
     }
 
     insertHTML(position, html) {
-        this.$el.insertAdjacentElement(position, html)
+        this.$el.insertAdjacentHTML(position, html)
+    }
+
+    innerHTML(content) {
+        this.$el.innerHTML = content
     }
 
     text(text) {

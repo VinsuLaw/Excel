@@ -8,6 +8,8 @@ export class ExcelComponent extends DOMListener {
         super($root, options.listeners)
         this.name = options.name
         this.emitter = options.emitter
+        this.ENABLE = true
+        this.DISABLE = false
         this.unsubs = []
     }
 

@@ -16,6 +16,7 @@ export class TableComponent extends ExcelComponent {
         this.$root = $root
         this.rowsCount = 20
         this.selection = new TableSelection(this.$root, this.rowsCount, options)
+        this.usageFormats = []
     }
 
     init() {
@@ -31,6 +32,57 @@ export class TableComponent extends ExcelComponent {
         this.$on('formula:done', () => {
             this.selection.current.focus()
         })
+
+        this.$on('toolbar:format', ($target, condition) => {
+            const formatType = $target.dataset('format')
+            const selection = this.selection.current.id()
+
+            if (formatType && condition) {
+                let alredyHas = false
+                this.selection.current.addClass([formatType])
+                if (this.usageFormats.length > 0) {
+                    this.usageFormats.forEach(cell => {
+                        for (let key in cell) {
+                            if (cell.hasOwnProperty(key)) {
+                                if (cell[key] === selection) {
+                                    cell['textFormats'].push(formatType)
+                                    alredyHas = true
+                                }
+                            }
+                        }
+                    })
+                    if (!alredyHas) {
+                        this.usageFormats.push({
+                            'selection': selection, 
+                            'textFormats': [formatType]
+                        })
+                    }
+                } else {
+                    this.usageFormats.push({
+                        'selection': selection, 
+                        'textFormats': [formatType]
+                    })
+                }
+            } else if (formatType && !condition) {
+                this.selection.current.removeClass([formatType])
+                if (this.usageFormats.length > 0) {
+                    this.usageFormats.forEach(cell => {
+                        for (let key in cell) {
+                            if (cell.hasOwnProperty(key)) {
+                                if (cell[key] === selection) {
+                                    cell['textFormats'] = cell['textFormats'].filter(el => el !== formatType)
+                                    if (cell['textFormats'].length === 0) {
+                                        this.usageFormats = this.usageFormats.filter(el => el.selection !== cell['selection'])
+                                    }
+                                }
+                            }
+                        }
+                    })
+                }
+            }
+
+            console.log(this.usageFormats);
+        })
     }
 
     render() {
@@ -39,6 +91,7 @@ export class TableComponent extends ExcelComponent {
 
     onClick(event) {
         event.target.dataset.cell ? this.selection.onClickSelect(event) : null
+        this.$emit('table:click')
     }
 
     onMousedown(event) {
