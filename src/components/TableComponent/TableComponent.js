@@ -80,8 +80,47 @@ export class TableComponent extends ExcelComponent {
                     })
                 }
             }
+            console.log(this.usageFormats);
+        })
+
+        this.$on('color:font', (color) => {
+            this.selection.current.css({color: color})
+            
+            const selection = this.selection.current.id()
 
             console.log(this.usageFormats);
+        })
+
+        this.$on('color:bg', (color) => {
+            this.selection.current.css({backgroundColor: color})
+        })
+
+        this.$on('h_align', (align) => {
+            if (align === 'format_align_center') {
+                this.selection.current.css({textAlign: 'center'})
+            } else if (align === 'format_align_left') {
+                this.selection.current.css({textAlign: 'left'})
+            } else if (align === 'format_align_right') {
+                this.selection.current.css({textAlign: 'right'})
+            }
+        })
+
+        this.$on('v_align', (align) => {
+            if (align === 'vertical_align_bottom') {
+                this.selection.current.css({display: 'flex', justifyContent: 'flex-end', alignContent: 'center', flexDirection: 'column'})
+            } else if (align === 'vertical_align_center') {
+                this.selection.current.css({display: 'flex', justifyContent: 'center', alignContent: 'center', flexDirection: 'column'})
+            } else if (align === 'vertical_align_top') {
+                this.selection.current.css({display: 'flex', justifyContent: 'flex-start', alignContent: 'center', flexDirection: 'column'})
+            }
+        })
+
+        this.$on('font:size', (size) => {
+            this.selection.current.css({fontSize: size + 'px'})
+        })
+
+        this.$on('font:font', (font) => {
+            this.selection.current.css({fontFamily: font})
         })
     }
 

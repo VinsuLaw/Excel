@@ -28,6 +28,10 @@ class DOM {
         })
     }
 
+    getStyle(type) {
+        return this.$el.style[type]
+    }
+
     findAll(selector) {
         return this.$el.querySelectorAll(selector)
     }
@@ -82,6 +86,10 @@ class DOM {
 
     insertHTML(position, html) {
         this.$el.insertAdjacentHTML(position, html)
+    }
+
+    insertElement(position, html) {
+        this.$el.insertAdjacentElement(position, html)
     }
 
     innerHTML(content) {

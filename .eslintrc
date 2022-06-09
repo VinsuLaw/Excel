@@ -26,7 +26,10 @@
         "guard-for-in": "off",
         "prefer-const": "off",
         "no-prototype-builtins": "off",
-        "no-case-declarations": "off"
+        "no-case-declarations": "off",
+        "brace-style": "off",
+        "block-spacing": "off",
+        "camelcase": "off"
     },
     "extends": ["eslint:recommended", "google"]
 }
