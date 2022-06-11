@@ -1,4 +1,5 @@
 import { $ } from "../core/DOM";
+import { Modal } from "../core/Modal";
 import { Select } from "../core/Select";
 import { getColorCode, toCssColor } from "../core/utils";
 import { ExcelComponent } from "./ExcelComponent";
@@ -9,12 +10,12 @@ export class ToolbarComponent extends ExcelComponent {
     constructor($root, options) {
         super($root, {
             name: 'Toolbar',
-            listeners: ['click', 'keydown'],
+            listeners: ['click', 'keydown', 'input'],
             ...options
         })
         this.options = options
         this.formats = ['bold', 'italic', 'strike']
-        this.$targetTool = null
+        this.$target = null
         this.formatBtns = null
         this.select_fontSize = null
         this.select_font = null
@@ -24,16 +25,21 @@ export class ToolbarComponent extends ExcelComponent {
         this.select_hAlign = null
         this.select_aAlign = null
         this.selects = null
+        this.modalLink = null
+        this.$cell = null
     }
 
     init() {
         super.init()
         this.formatBtns = this.$root.findAll(`[data-format]`)
         this.initSelectInstances()
+        this.modalLink = new Modal('#modal-link')
 
         for (let i = 0; i < this.selects.length; i++) {
             this.selects[i].renderSelect()
         }
+
+        this.$on('table:init', (cell) => this.$cell = cell)
 
         this.$on('header:click', () => {
             closeAllSelects(this.selects)
@@ -48,6 +54,7 @@ export class ToolbarComponent extends ExcelComponent {
         })
 
         this.$on('table:select', $cell => {
+            this.$cell = $cell
             this.setColors($cell)
             this.setAligns($cell)
             this.setSize($cell)
@@ -314,28 +321,79 @@ export class ToolbarComponent extends ExcelComponent {
                         <li><span class="material-icons">vertical_align_top</span></li>
                     </ul>
                 </div>
-                <span class="material-icons btn">link</span>
-                
+                <span class="material-icons btn" data-link="true">link</span>
+            </div>
+        </div>
+        <div class="modal-overlay" id="modal-link" data-close="true">
+            <div class="modal-window">
+                <form class="modal__content">
+                    <p>Enter the link:</p>
+                    <input type="text" placeholder="https://google.com" data-input="link" name="link" required>
+                    <input type="text" placeholder="Text" data-input="text" name="text" required >
+                    <div class="row">
+                        <button type="submit" class="btn-primary" data-btn="ok"><span class="material-icons" data-btn="ok">done</span></button>
+                        <div class="btn-danger" data-btn="no"><span class="material-icons" data-btn="no">close</span></div>
+                    </div>
+                    <div id="error"></div>
+                </form>
             </div>
         </div>
         `
     }
 
     onClick(event) {
-        this.$targetTool = $(event.target)
+        this.$target = $(event.target)
 
-        if (this.$targetTool.dataset('format')) {
-            if (this.$targetTool.hasClass('active')) {
-                this.$targetTool.removeClass(['active'])
-                this.$emit('toolbar:format', this.$targetTool, this.DISABLE)
+        if (this.$target.dataset('format')) {
+            if (this.$target.hasClass('active')) {
+                this.$target.removeClass(['active'])
+                this.$emit('toolbar:format', this.$target, this.DISABLE)
             } else {
-                this.$targetTool.addClass(['active'])
-                this.$emit('toolbar:format', this.$targetTool, this.ENABLE)
+                this.$target.addClass(['active'])
+                this.$emit('toolbar:format', this.$target, this.ENABLE)
             }
         }
 
+        if (this.modalLink.opened) {
+            if (this.$target.dataset('close')) {
+                this.modalLink.close()
+            } else {
+                if (this.$target.dataset('btn')) {
+                    if (this.$target.dataset('btn') === this.modalLink.ok.dataset('btn')) {
+                        let inputs = {}
+                        inputs = this.modalLink.operation(event)
+                        if (inputs != undefined) {
+                            this.$emit('modal:link', inputs)
+                        }
+                    } else {
+                        this.modalLink.close()
+                    }
+                }
+            }
+        }
+
+        if (this.$target.dataset('link')) {
+            this.modalLink.open()
+        }
+
         // Select processing
-        this.selectProcessing(this.$targetTool)
+        this.selectProcessing(this.$target)
+    }
+
+    onInput(event) {
+        if (event.target.name === 'link') {
+            if (event.target.value.length <= 10) {
+                $(event.target).css({border: '1px solid red'})
+            } else {
+                $(event.target).css({border: '1px solid rgb(217, 217, 217)'})
+            }
+        } else {
+            if (event.target.value.length === 0) {
+                $(event.target).css({border: '1px solid red'})
+            } else {
+                $(event.target).css({border: '1px solid rgb(217, 217, 217)'})
+            }
+        }
     }
 
     onKeydown(event) {

@@ -25,12 +25,13 @@ export class TableComponent extends ExcelComponent {
 
         const $cell = $(this.$root.findElement(`[data-col="0:0"]`))
         this.selection.select($cell)
+        this.$emit('table:init', $cell)
 
-        /*
-        this.$subscribe((state) => {
-            console.log('Table state: ', state);
+        this.$on('modal:link', (inputs) => {
+            this.selection.current.text(inputs.text)
+            this.selection.current.css({textDecoration: 'underline'})
+            this.selection.current.$el.dataset.link = inputs.link
         })
-        */
         
         this.$on('formula:input', (text) => {
             this.selection.current.text(text)
@@ -218,6 +219,12 @@ export class TableComponent extends ExcelComponent {
     onClick(event) {
         event.target.dataset.cell ? this.selection.onClickSelect(event) : null
         this.$emit('table:click')
+
+        if ($(event.target).dataset('link')) {
+            if (event.altKey) {
+                window.open($(event.target).dataset('link'), '_blank')
+            }
+        }
     }
 
     async resizeHandler(event) {
@@ -248,6 +255,10 @@ export class TableComponent extends ExcelComponent {
     }
 
     onInput(event) {
+        if (this.selection.current.dataset('link')) {
+            this.selection.current.removeAttribute('style')
+            this.selection.current.removeDataset('link')
+        }
         this.$emit('table:input', $(event.target).text())
     }
 

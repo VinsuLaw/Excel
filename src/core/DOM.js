@@ -18,6 +18,10 @@ class DOM {
         return $(this.$el.closest(selector))
     }
 
+    getChildByClass(selector) {
+        return Array.from(this.$el.childNodes).filter(node => node.className === selector)[0]
+    }
+
     getCoords() {
         return this.$el.getBoundingClientRect()
     }
@@ -68,6 +72,16 @@ class DOM {
         return this.$el.dataset[type]
     }
 
+    removeDataset(type) {
+        this.$el.removeAttribute(`data-${type}`)
+        return this
+    }
+
+    removeAttribute(type) {
+        this.$el.removeAttribute(type)
+        return this
+    }
+
     removeClass(classList = []) {
         classList.forEach(element => this.$el.classList.remove(element))
     }
@@ -103,6 +117,15 @@ class DOM {
         }
 
         return this.$el.textContent.trim()
+    }
+
+    value(text) {
+        if (typeof text === 'string') {
+            this.$el.value = text
+            return this
+        }
+
+        return this.$el.value.trim()
     }
 
     focus() {

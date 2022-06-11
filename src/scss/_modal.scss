@@ -1,0 +1,126 @@
+.modal-overlay.open {
+    background: rgba(0,0,0,.5);
+    opacity: 1;
+    z-index: 9000;
+}
+
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    right: 0;
+    left: 0;
+    bottom: 0;
+    background: rgba(0,0,0,0);
+    transition: background .2s ease-in;
+    z-index: -100;
+    opacity: 0;
+}
+
+.modal-window {
+    max-width: 900px;
+    border-radius: 7px;
+    background-color: #fff;
+    margin: 0 auto;
+    transform: translateY(-200px);
+    transition: transform .2s ease-in;
+
+    & .modal__content {
+        position: relative;
+        width: 100%;
+        padding: 25px 10px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        margin-left: auto;
+        margin-right: auto;
+
+        & p {
+            text-align: center;
+            padding-bottom: 15px;
+            font-size: 18px;
+            color: #000;
+            font-weight: bold;
+        }
+
+        & input {
+            width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+            margin-bottom: 15px;
+            padding: 5px 10px;
+            text-align: center;
+            color: #888;
+            background-color: white;
+            border: 1px solid transparent;
+            border-radius: 4px;
+            font-size: 18px;
+            outline: none;
+            border: 1px solid $border-color;
+            
+            &:focus {
+                color: #000;
+                border: 2px solid #1a73e8;
+            }
+
+            &:last-child {
+                margin-bottom: 0;
+            }
+        }
+
+        & .btn-primary {
+            position: absolute;
+            width: 30px;
+            height: 30px;
+            background-color: $active-bg;
+            border-radius: 5px;
+            text-align: center;
+            padding-top: 3px;
+            right: 55px;
+            top: 48%;
+            cursor: pointer;
+            border: none;
+            color: grey;
+
+            &:hover {
+                background-color: $hover-background;
+                color: green;
+            }
+
+            &:active {
+                background-color: $active-select-item;
+            }
+        }
+
+        & .btn-danger {
+            position: absolute;
+            width: 30px;
+            height: 30px;
+            background-color: $active-bg;
+            border-radius: 5px;
+            text-align: center;
+            padding-top: 3px;
+            right: 20px;
+            top: 48%;
+            cursor: pointer;
+
+            &:hover {
+                background-color: $hover-background;
+                color: red;
+            }
+
+            &:active {
+                background-color: $active-select-item;
+            }
+        }
+
+        & #error {
+            color: red;
+            text-align: center;
+            font-weight: bold;
+        }
+    }
+}
+
+.modal-window.open {
+    transform: translateY(200px);
+}
