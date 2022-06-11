@@ -3,6 +3,7 @@ import { createTable } from "./table.template";
 import { resizeTable, shouldResize } from "./table.resize";
 import { $ } from "../../core/DOM";
 import { TableSelection } from "./TableSelection";
+import * as actions from "../../store/actions"
 
 export class TableComponent extends ExcelComponent {
     static PARENT_NODE = 'excel__table'
@@ -24,6 +25,12 @@ export class TableComponent extends ExcelComponent {
 
         const $cell = $(this.$root.findElement(`[data-col="0:0"]`))
         this.selection.select($cell)
+
+        /*
+        this.$subscribe((state) => {
+            console.log('Table state: ', state);
+        })
+        */
         
         this.$on('formula:input', (text) => {
             this.selection.current.text(text)
@@ -36,6 +43,7 @@ export class TableComponent extends ExcelComponent {
         this.$on('toolbar:format', ($target, condition) => {
             const formatType = $target.dataset('format')
             const selection = this.selection.current.id()
+            let data = {}
 
             if (formatType && condition) {
                 let alredyHas = false
@@ -47,6 +55,12 @@ export class TableComponent extends ExcelComponent {
                                 if (cell[key] === selection) {
                                     cell['textFormats'].push(formatType)
                                     alredyHas = true
+
+                                    data = {
+                                        action: 'add',
+                                        formatType,
+                                        id: selection
+                                    }
                                 }
                             }
                         }
@@ -56,12 +70,24 @@ export class TableComponent extends ExcelComponent {
                             'selection': selection, 
                             'textFormats': [formatType]
                         })
+
+                        data = {
+                            action: 'add',
+                            formatType,
+                            id: selection
+                        }
                     }
                 } else {
                     this.usageFormats.push({
                         'selection': selection, 
                         'textFormats': [formatType]
                     })
+
+                    data = {
+                        action: 'add',
+                        formatType,
+                        id: selection
+                    }
                 }
             } else if (formatType && !condition) {
                 this.selection.current.removeClass([formatType])
@@ -74,13 +100,19 @@ export class TableComponent extends ExcelComponent {
                                     if (cell['textFormats'].length === 0) {
                                         this.usageFormats = this.usageFormats.filter(el => el.selection !== cell['selection'])
                                     }
+                                    data = {
+                                        action: 'remove',
+                                        formatType,
+                                        id: selection
+                                    }
                                 }
                             }
                         }
                     })
                 }
             }
-            console.log(this.usageFormats);
+
+            this.$dispatch(actions.toolFormats(data))
         })
 
         this.$on('color:font', (color) => {
@@ -88,11 +120,26 @@ export class TableComponent extends ExcelComponent {
             
             const selection = this.selection.current.id()
 
-            console.log(this.usageFormats);
+            let data = {
+                type: 'fontColor',
+                color,
+                id: selection
+            }         
+            
+            this.$dispatch(actions.toolColors(data))
         })
 
         this.$on('color:bg', (color) => {
             this.selection.current.css({backgroundColor: color})
+            const selection = this.selection.current.id()
+
+            let data = {
+                type: 'bgColor',
+                color,
+                id: selection
+            }         
+            
+            this.$dispatch(actions.toolColors(data))
         })
 
         this.$on('h_align', (align) => {
@@ -103,6 +150,16 @@ export class TableComponent extends ExcelComponent {
             } else if (align === 'format_align_right') {
                 this.selection.current.css({textAlign: 'right'})
             }
+
+            const selection = this.selection.current.id()
+
+            let data = {
+                type: 'h_align',
+                align,
+                id: selection
+            }
+
+            this.$dispatch(actions.toolAligns(data))
         })
 
         this.$on('v_align', (align) => {
@@ -113,14 +170,44 @@ export class TableComponent extends ExcelComponent {
             } else if (align === 'vertical_align_top') {
                 this.selection.current.css({display: 'flex', justifyContent: 'flex-start', alignContent: 'center', flexDirection: 'column'})
             }
+
+            const selection = this.selection.current.id()
+
+            let data = {
+                type: 'v_align',
+                align,
+                id: selection
+            }
+
+            this.$dispatch(actions.toolAligns(data))
         })
 
         this.$on('font:size', (size) => {
             this.selection.current.css({fontSize: size + 'px'})
+
+            const selection = this.selection.current.id()
+
+            let data = {
+                type: 'font_size',
+                size,
+                id: selection
+            }
+
+            this.$dispatch(actions.toolFont(data))
         })
 
         this.$on('font:font', (font) => {
             this.selection.current.css({fontFamily: font})
+
+            const selection = this.selection.current.id()
+
+            let data = {
+                type: 'font_font',
+                font,
+                id: selection
+            }
+
+            this.$dispatch(actions.toolFont(data))
         })
     }
 
@@ -133,12 +220,20 @@ export class TableComponent extends ExcelComponent {
         this.$emit('table:click')
     }
 
+    async resizeHandler(event) {
+        try {
+            const data = await resizeTable(this.$root, event, this.rowsCount)
+            this.$dispatch(actions.tableResize(data))
+        } catch (e) {
+            console.warn(e.message)
+        }
+    }
+
     onMousedown(event) {
         if (shouldResize(event)) {
             this.isMouseDown = true
-            resizeTable(this.$root, event, this.rowsCount)
+            this.resizeHandler(event)
         }
-
         if (this.selection.shouldSelect(event)) {
             this.selection.mouseSelection(event)
         }

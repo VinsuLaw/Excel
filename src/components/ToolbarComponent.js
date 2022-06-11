@@ -121,19 +121,6 @@ export class ToolbarComponent extends ExcelComponent {
             ]
         })
 
-        this.select_scale = new Select('#scale-select', 'normal', {
-            label: '100%',
-            items: [
-                '50%',
-                '75%',
-                '90%',
-                '100%',
-                '125%',
-                '150%',
-                '200%'
-            ]
-        })
-
         this.select_fontColor = new Select('#fontColor-select', 'btn', {
             label: 'color',
             items: [
@@ -206,8 +193,7 @@ export class ToolbarComponent extends ExcelComponent {
 
         this.selects = [
             this.select_fontSize, 
-            this.select_font, 
-            this.select_scale, 
+            this.select_font,  
             this.select_fontColor, 
             this.select_bgColor,
             this.select_hAlign,
@@ -222,24 +208,6 @@ export class ToolbarComponent extends ExcelComponent {
                 <span class="material-icons">undo</span>
                 <span class="material-icons">redo</span>
                 <span class="material-icons">print</span>
-                <span class="material-icons">format_paint</span>
-            </div>
-            <div class="scale">
-                <div class="select" id="scale-select">
-                    <div class="select-label" data-select="scale">
-                        <span class="selected border-right" data-select="scale">100%</span>
-                        <span class="material-icons" data-select="scale" data-tap="true">expand_more</span>
-                    </div>
-                    <ul class="selection hide">
-                        <li>50%</li>
-                        <li>75%</li>
-                        <li>90%</li>
-                        <li>100%</li>
-                        <li>125%</li>
-                        <li>150%</li>
-                        <li>200%</li>
-                    </ul>
-                </div>
             </div>
             <div class="font-types row">
                 <div class="fonts">
@@ -380,11 +348,10 @@ export class ToolbarComponent extends ExcelComponent {
     selectProcessing($targetTool) {
         const selectFontSize = this.selects[0]
         const selectFont = this.selects[1]
-        const selectScale = this.selects[2]
-        const selectFontColor = this.selects[3]
-        const selectBgColor = this.selects[4]
-        const selectAlignH = this.selects[5]
-        const selectAlignA = this.selects[6]
+        const selectFontColor = this.selects[2]
+        const selectBgColor = this.selects[3]
+        const selectAlignH = this.selects[4]
+        const selectAlignA = this.selects[5]
     
         // Choise from select for fonts-size
         if (selectFontSize.UNFOLD && $targetTool.dataset('id')) {
@@ -396,11 +363,6 @@ export class ToolbarComponent extends ExcelComponent {
         if (selectFont.UNFOLD && $targetTool.dataset('id')) {
             selectFont.choiceSelect(+$targetTool.dataset('id'))
             this.$emit('font:font', selectFont.selected)
-        }
-    
-        // Choise from select for scale
-        if (selectScale.UNFOLD && $targetTool.dataset('id')) {
-            selectScale.choiceSelect(+$targetTool.dataset('id'))
         }
         
         // Choise from select for font color
@@ -454,11 +416,6 @@ export class ToolbarComponent extends ExcelComponent {
             return
         }
     
-        if (selectScale.UNFOLD && selectionTap) {
-            selectScale.close()
-            return
-        }
-    
         if (selectFontColor.UNFOLD && selectionTap) {
             selectFontColor.close()
             return
@@ -487,9 +444,6 @@ export class ToolbarComponent extends ExcelComponent {
                 case 'fonts':
                     selectFont.unfold()
                     break
-                case 'scale':
-                    selectScale.unfold()
-                    break
                 case 'fontColor':
                     selectFontColor.unfold()
                     break
@@ -506,7 +460,7 @@ export class ToolbarComponent extends ExcelComponent {
                     break
             }
         } else if (selectFontSize.UNFOLD) {
-            closeAllSelects(selects)
+            closeAllSelects(this.selects)
         }
     }
 
