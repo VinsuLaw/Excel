@@ -7,7 +7,7 @@ export class FormulaComponent extends ExcelComponent {
     constructor($root, options) {
         super($root, {
             name: 'Formula',
-            listeners: ['input', 'keydown'],
+            listeners: ['input', 'keydown', 'click'],
             ...options
         })
     }
@@ -16,6 +16,12 @@ export class FormulaComponent extends ExcelComponent {
         super.init()
 
         this.$formula = this.$root.findElement('#formula')
+
+        /*
+        this.$subscribe((state) => {
+            console.log('Formula state: ', state);
+        })
+        */
 
         this.$on('table:input', (text) => {
             this.$formula.textContent = text
@@ -43,5 +49,9 @@ export class FormulaComponent extends ExcelComponent {
             event.preventDefault()
             this.$emit('formula:done')
         }
+    }
+
+    onClick() {
+        this.$emit('formula:click')
     }
 }

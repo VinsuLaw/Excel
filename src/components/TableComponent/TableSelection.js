@@ -17,10 +17,14 @@ export class TableSelection extends ExcelComponent {
     // Select cell
     select($cell) {
         $cell.addClass([TableSelection.className])
-        $cell.focus()
-        this.current = $cell
         this.group.push($cell.id())
-        this.$emit('table:select', $cell)
+        this.current = $cell
+    }
+
+    focus() {
+        this.current.focus()
+        this.$emit('table:select', this.current)
+        this.$dispatch({type: '__TEST__'})
     }
 
     // Selection by one mouse click
@@ -55,6 +59,7 @@ export class TableSelection extends ExcelComponent {
 
         const $cell = $(this.$root.findElement(`[data-col="${event.target.dataset.col}"]`))
         this.select($cell)
+        this.focus()
     }
 
     // Table selection by keybord
@@ -69,6 +74,7 @@ export class TableSelection extends ExcelComponent {
 
         const $next = $(this.$root.findElement(nextCell(event.key, id, this.rowsCount)))
         this.select($next)
+        this.focus()
     }
 
     // Get the parsed cell.dataset
@@ -188,15 +194,13 @@ export class TableSelection extends ExcelComponent {
                     item.offsetLeft <= leftScrolled + x2 &&
                     item.offsetTop >= y1 && item.offsetTop <= y2
                     ) {
-                        this.group.push(item.dataset.col)
+                        let $cell = $(this.$root.findElement(`[data-col="${item.dataset.col}"]`))
+                        this.select($cell)
                     }
             }
         }
-    
-        this.group.forEach(dataset => {
-            const $cell = $(this.$root.findElement(`[data-col="${dataset}"]`))
-            this.select($cell)
-        })
+
+        this.focus()
     }
 }
 
@@ -229,7 +233,7 @@ function nextCell(key, {col, row}, rowsCount) {
 function creatSelectionFrame($root) {
     const selectionFrame = $($root.create('div'))
     selectionFrame.addID('selectFrame')
-    $root.insertHTML('beforeend', selectionFrame.$el)
+    $root.insertElement('beforeend', selectionFrame.$el)
     return selectionFrame
 }
 

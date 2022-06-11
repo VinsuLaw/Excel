@@ -52,6 +52,12 @@
             color: green;
             background-color: $active-bg;
         }
+
+        &.active {
+            color: $buttons-color;
+            background-color: $hover-background;
+            border-radius: 3px;
+        }
     }
 
     & .select-label_icon {

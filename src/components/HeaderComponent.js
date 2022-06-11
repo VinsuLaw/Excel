@@ -4,10 +4,11 @@ import img from "../img/sheets_doc.png"
 export class HeaderComponent extends ExcelComponent {
     static PARENT_NODE = 'excel__header'
 
-    constructor($root) {
+    constructor($root, options) {
         super($root, {
             name: 'Header',
-            listeners: ['click']
+            listeners: ['click'],
+            ...options
         })
     }
 
@@ -104,5 +105,6 @@ export class HeaderComponent extends ExcelComponent {
 
     onClick() {
         console.log('Header component click');
+        this.$emit('header:click')
     }
 }

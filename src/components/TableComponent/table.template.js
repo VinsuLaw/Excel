@@ -19,7 +19,7 @@ function toColumn(col, index) {
 
 function createRow(idx, content) {
     return `
-        <div class="table_row" data-type="resizable">
+        <div class="table_row" data-type="resizable" data-row="${idx}">
             <div class="row-info">
                 ${idx || ''}
                 ${idx > 0 ? '<div class="row-resize" data-resize="row"></div>' : ''}
