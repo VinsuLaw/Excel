@@ -5,6 +5,7 @@ import { $ } from "../../core/DOM";
 import { TableSelection } from "./TableSelection";
 import * as actions from "../../store/actions"
 import { renderFromStorage } from "./render.storage";
+import { parse } from "../../core/parse";
 
 export class TableComponent extends ExcelComponent {
     static PARENT_NODE = 'excel__table'
@@ -40,7 +41,9 @@ export class TableComponent extends ExcelComponent {
         })
         
         this.$on('formula:input', (text) => {
-            this.selection.current.text(text)
+            this.selection.current
+                .attr('data-value', text)
+                .text(parse(text))
             this.updateTextWithFormula(text, null)
         })
 

@@ -1,3 +1,5 @@
+import { parse } from "../../core/parse"
+
 const CODES_ASCII = {
     A: 65,
     Z: 90
@@ -40,9 +42,10 @@ function toCell(state, row, dataState) {
             contenteditable="true"  
             data-col="${id}" 
             data-cell="true"
+            data-value="${getDataStateText(id, dataState)}"
             ${getDataStateLink(id, dataState)}
             style="width: ${getWidth(state, col)}; text-decoration: ${getTextDecor(id, dataState)};"
-            >${getDataStateText(id, dataState)}</div>
+            >${parse(getDataStateText(id, dataState))}</div>
         `
     }
 }

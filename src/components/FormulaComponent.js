@@ -22,7 +22,7 @@ export class FormulaComponent extends ExcelComponent {
         })
 
         this.$on('table:select', ($cell) => {
-            this.$formula.textContent = $cell.text()
+            this.$formula.textContent = $cell.attr('data-value')
         })
     } 
 
