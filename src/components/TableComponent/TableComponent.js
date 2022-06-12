@@ -1,10 +1,10 @@
 import { ExcelComponent } from "../ExcelComponent";
 import { createTable } from "./table.template";
-import { autoResizeTable, resizeTable, shouldResize } from "./table.resize";
+import { resizeTable, shouldResize } from "./table.resize";
 import { $ } from "../../core/DOM";
 import { TableSelection } from "./TableSelection";
 import * as actions from "../../store/actions"
-import { removepx } from "../../core/utils";
+import { renderFromStorage } from "./render.storage";
 
 export class TableComponent extends ExcelComponent {
     static PARENT_NODE = 'excel__table'
@@ -16,6 +16,7 @@ export class TableComponent extends ExcelComponent {
             ...options
         })
         this.$root = $root
+        this.state = this.store.getState()
         this.rowsCount = 20
         this.selection = new TableSelection(this.$root, this.rowsCount, options)
         this.usageFormats = []
@@ -27,6 +28,9 @@ export class TableComponent extends ExcelComponent {
         const $cell = $(this.$root.findElement(`[data-col="0:0"]`))
         this.selection.select($cell)
         this.$emit('table:init', $cell)
+        this.updateTextWithFormula(this.selection.current.text(), null)
+ 
+        renderFromStorage(this.$root, this.state)
 
         this.$on('modal:link', (inputs) => {
             this.selection.current.text(inputs.text)
@@ -113,6 +117,12 @@ export class TableComponent extends ExcelComponent {
                             }
                         }
                     })
+                } else {
+                    data = {
+                        action: 'remove',
+                        formatType,
+                        id: selection
+                    }
                 }
             }
 
@@ -216,7 +226,7 @@ export class TableComponent extends ExcelComponent {
     }
 
     render() {
-        return createTable(this.rowsCount)
+        return createTable(this.rowsCount, this.state)
     }
 
     onClick(event) {
