@@ -36,6 +36,10 @@ class DOM {
         return this.$el.style[type]
     }
 
+    getComputedStyleM(type) {
+        return document.defaultView.getComputedStyle(this.$el)[type]
+    }
+
     findAll(selector) {
         return this.$el.querySelectorAll(selector)
     }
@@ -70,6 +74,15 @@ class DOM {
 
     dataset(type) {
         return this.$el.dataset[type]
+    }
+
+    attr(name, value) {
+        if (value) {
+            this.$el.setAttribute(name, value)
+            return this
+        } else {
+            return this.$el.getAttribute(name)
+        }
     }
 
     removeDataset(type) {
@@ -111,7 +124,7 @@ class DOM {
     }
 
     text(text) {
-        if (typeof text === 'string') {
+        if (typeof text !== 'undefined') {
             this.$el.textContent = text
             return this
         }

@@ -1,5 +1,9 @@
+import { DEFAULT_TITLE } from "..";
 import { ExcelComponent } from "../components/ExcelComponent";
+import { $ } from "../core/DOM";
+import { debounce } from "../core/utils";
 import img from "../img/sheets_doc.png"
+import { changeTitle } from "../store/actions";
 
 export class HeaderComponent extends ExcelComponent {
     static PARENT_NODE = 'excel__header'
@@ -7,12 +11,19 @@ export class HeaderComponent extends ExcelComponent {
     constructor($root, options) {
         super($root, {
             name: 'Header',
-            listeners: ['click'],
+            listeners: ['click', 'input'],
             ...options
         })
+
+        this.prepare()
+    }
+
+    prepare() {
+        this.onInput = debounce(this.onInput, 300)
     }
 
     render() {
+        const title = this.store.getState().appTitle || DEFAULT_TITLE
         return `
             <div class="row">
                 <a href="#" class="logo">
@@ -21,7 +32,7 @@ export class HeaderComponent extends ExcelComponent {
                     
                 <div class="column">
                     <div class="row">
-                        <div class="input" contenteditable="true">Table name</div>
+                        <div class="input" contenteditable="true">${title}</div>
                         <span class="material-icons star">star_border</span>
                     </div>
                     <ul class="panel_items">
@@ -106,5 +117,11 @@ export class HeaderComponent extends ExcelComponent {
     onClick() {
         console.log('Header component click');
         this.$emit('header:click')
+    }
+
+    onInput(event) {
+        console.log('oninput');
+        const $target = $(event.target)
+        this.$dispatch(changeTitle($target.text()))
     }
 }

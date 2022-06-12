@@ -4,6 +4,8 @@ import { resizeTable, shouldResize } from "./table.resize";
 import { $ } from "../../core/DOM";
 import { TableSelection } from "./TableSelection";
 import * as actions from "../../store/actions"
+import { renderFromStorage } from "./render.storage";
+import { parse } from "../../core/parse";
 
 export class TableComponent extends ExcelComponent {
     static PARENT_NODE = 'excel__table'
@@ -15,6 +17,7 @@ export class TableComponent extends ExcelComponent {
             ...options
         })
         this.$root = $root
+        this.state = this.store.getState()
         this.rowsCount = 20
         this.selection = new TableSelection(this.$root, this.rowsCount, options)
         this.usageFormats = []
@@ -26,15 +29,22 @@ export class TableComponent extends ExcelComponent {
         const $cell = $(this.$root.findElement(`[data-col="0:0"]`))
         this.selection.select($cell)
         this.$emit('table:init', $cell)
+        this.updateTextWithFormula(this.selection.current.text(), null)
+ 
+        renderFromStorage(this.$root, this.state)
 
         this.$on('modal:link', (inputs) => {
             this.selection.current.text(inputs.text)
             this.selection.current.css({textDecoration: 'underline'})
             this.selection.current.$el.dataset.link = inputs.link
+            this.updateTextWithFormula(inputs.text, inputs.link)
         })
         
         this.$on('formula:input', (text) => {
-            this.selection.current.text(text)
+            this.selection.current
+                .attr('data-value', text)
+                .text(parse(text))
+            this.updateTextWithFormula(text, null)
         })
 
         this.$on('formula:done', () => {
@@ -110,6 +120,12 @@ export class TableComponent extends ExcelComponent {
                             }
                         }
                     })
+                } else {
+                    data = {
+                        action: 'remove',
+                        formatType,
+                        id: selection
+                    }
                 }
             }
 
@@ -213,7 +229,7 @@ export class TableComponent extends ExcelComponent {
     }
 
     render() {
-        return createTable(this.rowsCount)
+        return createTable(this.rowsCount, this.state)
     }
 
     onClick(event) {
@@ -254,12 +270,19 @@ export class TableComponent extends ExcelComponent {
         this.$root.off('mousemove', this.onMousemove)
     }
 
+    updateTextWithFormula(text, link) {
+        this.$dispatch(actions.changeText({
+            id: this.selection.current.id(),
+            all: {text, link}
+        }))
+    } 
+
     onInput(event) {
         if (this.selection.current.dataset('link')) {
             this.selection.current.removeAttribute('style')
             this.selection.current.removeDataset('link')
         }
-        this.$emit('table:input', $(event.target).text())
+        this.updateTextWithFormula($(event.target).text(), null)
     }
 
     onKeydown(event) {

@@ -36,3 +36,20 @@ export function storage(key, data = null) {
     }
     localStorage.setItem(key, JSON.stringify(data))
 }
+
+export function removepx(data) {
+    return parseInt(data.replace('px', ''))
+}
+
+export function debounce(fn, wait) {
+    let timeout
+    return function(...args) {
+        const later = () => {
+            clearTimeout(timeout)
+            // eslint-disable-next-line
+            fn.apply(this, args)
+        }
+        clearTimeout(timeout)
+        timeout = setTimeout(later, wait)
+    }
+}
