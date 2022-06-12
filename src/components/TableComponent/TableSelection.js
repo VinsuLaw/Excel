@@ -24,7 +24,6 @@ export class TableSelection extends ExcelComponent {
     focus() {
         this.current.focus()
         this.$emit('table:select', this.current)
-        this.$dispatch({type: '__TEST__'})
     }
 
     // Selection by one mouse click

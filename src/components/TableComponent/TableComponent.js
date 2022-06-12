@@ -1,9 +1,10 @@
 import { ExcelComponent } from "../ExcelComponent";
 import { createTable } from "./table.template";
-import { resizeTable, shouldResize } from "./table.resize";
+import { autoResizeTable, resizeTable, shouldResize } from "./table.resize";
 import { $ } from "../../core/DOM";
 import { TableSelection } from "./TableSelection";
 import * as actions from "../../store/actions"
+import { removepx } from "../../core/utils";
 
 export class TableComponent extends ExcelComponent {
     static PARENT_NODE = 'excel__table'
@@ -31,10 +32,12 @@ export class TableComponent extends ExcelComponent {
             this.selection.current.text(inputs.text)
             this.selection.current.css({textDecoration: 'underline'})
             this.selection.current.$el.dataset.link = inputs.link
+            this.updateTextWithFormula(inputs.text, inputs.link)
         })
         
         this.$on('formula:input', (text) => {
             this.selection.current.text(text)
+            this.updateTextWithFormula(text, null)
         })
 
         this.$on('formula:done', () => {
@@ -254,12 +257,19 @@ export class TableComponent extends ExcelComponent {
         this.$root.off('mousemove', this.onMousemove)
     }
 
+    updateTextWithFormula(text, link) {
+        this.$dispatch(actions.changeText({
+            id: this.selection.current.id(),
+            all: {text, link}
+        }))
+    } 
+
     onInput(event) {
         if (this.selection.current.dataset('link')) {
             this.selection.current.removeAttribute('style')
             this.selection.current.removeDataset('link')
         }
-        this.$emit('table:input', $(event.target).text())
+        this.updateTextWithFormula($(event.target).text(), null)
     }
 
     onKeydown(event) {

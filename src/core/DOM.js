@@ -36,6 +36,10 @@ class DOM {
         return this.$el.style[type]
     }
 
+    getComputedStyleM(type) {
+        return document.defaultView.getComputedStyle(this.$el)[type]
+    }
+
     findAll(selector) {
         return this.$el.querySelectorAll(selector)
     }

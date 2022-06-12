@@ -41,7 +41,6 @@ export function resizeTable($root, event, rowsCount) {
                 $parent.css({height: value + 'px'})
             }
 
-            console.log(type);
             resolve({
                 value,
                 type,
