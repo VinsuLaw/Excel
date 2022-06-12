@@ -1,4 +1,4 @@
-import { TABLE_RESIZE, TOOL_ALIGN, TOOL_FORMATS, TOOL_COLOR, TOOL_FONT, CHANGE_TEXT } from "./types";
+import { TABLE_RESIZE, TOOL_ALIGN, TOOL_FORMATS, TOOL_COLOR, TOOL_FONT, CHANGE_TEXT, CHANGE_TITLE } from "./types";
 
 export function tableResize(data) {
     return {
@@ -38,6 +38,13 @@ export function toolFont(data) {
 export function changeText(data) {
     return {
         type: CHANGE_TEXT,
+        data
+    }
+}
+
+export function changeTitle(data) {
+    return {
+        type: CHANGE_TITLE,
         data
     }
 }

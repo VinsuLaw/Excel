@@ -6,14 +6,19 @@ import { TableComponent } from './components/TableComponent/TableComponent'
 import './scss/index.scss'
 import { createStore } from './core/createStore'
 import { rootReducer } from './store/rootReducer'
-import { storage } from './core/utils'
+import { storage, debounce } from './core/utils'
 import { initialState } from './store/initialState'
+
+export const DEFAULT_TITLE = 'New table'
 
 const store = createStore(rootReducer, initialState)
 
-store.subscribe(state => {
+const stateListener = debounce(state => {
+    console.log(state)
     storage('excel-state', state)
-})
+}, 500)
+
+store.subscribe(stateListener)
 
 const excel = new Excel('#app', {
     components: [HeaderComponent, ToolbarComponent, FormulaComponent, TableComponent],

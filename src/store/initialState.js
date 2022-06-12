@@ -1,6 +1,8 @@
 import { storage } from "../core/utils"
+import { DEFAULT_TITLE } from "../index"
 
 const defaultState = {
+    appTitle: DEFAULT_TITLE,
     rowState: {},
     colState: {},
     formatTypes: {},
