@@ -1,4 +1,5 @@
 import { parse } from "../../core/parse"
+import { ActiveRoute } from "../../core/routes/ActiveRoute"
 
 const CODES_ASCII = {
     A: 65,
@@ -35,11 +36,12 @@ function createRow(idx, content, state) {
 }
 
 function toCell(state, row, dataState) {
+    const editable = ActiveRoute.path.includes('dump') ? 'false' : 'true'
     return function(_, col) {
         const id = `${row}:${col}`
         return `
             <div class="cell" 
-            contenteditable="true"  
+            contenteditable="${editable}"  
             data-col="${id}" 
             data-cell="true"
             data-value="${getDataStateText(id, dataState)}"

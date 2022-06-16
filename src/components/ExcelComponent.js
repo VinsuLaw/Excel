@@ -1,4 +1,5 @@
 import { DOMListener } from "../core/DOMListener";
+import * as actions from "../store/actions"
 
 // $root: Objected root node of the component
 // options: Object with listeners and emitter instance
@@ -28,6 +29,13 @@ export class ExcelComponent extends DOMListener {
 
     $dispatch(action) {
         this.store.dispatch(action)
+    }
+
+    updateTextWithFormulaEx(text, link, $cell) {
+        this.$dispatch(actions.changeText({
+            id: $cell.id(),
+            all: {text, link}
+        }))
     }
 
     $subscribe(fn) {

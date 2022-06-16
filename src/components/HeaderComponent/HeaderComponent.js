@@ -16,10 +16,13 @@ export class HeaderComponent extends ExcelComponent {
             listeners: ['click', 'input'],
             ...options
         })
+        this.options = options
         this.panelFile = null
         this.panelEdit = null
         this.panelInsert = null
         this.panelFormat = null 
+
+        this.selected = null
 
         this.prepare()
     }
@@ -31,10 +34,10 @@ export class HeaderComponent extends ExcelComponent {
     init() {
         super.init()
 
-        this.panelFile = new Panel(this.$root, '#header-file', 'file')
-        this.panelEdit = new Panel(this.$root, '#header-edit', 'edit')
-        this.panelInsert = new Panel(this.$root, '#header-insert', 'insert')
-        this.panelFormat = new Panel(this.$root, '#header-format', 'format')
+        this.panelFile = new Panel(this.$root, '#header-file', 'file', this.options)
+        this.panelEdit = new Panel(this.$root, '#header-edit', 'edit', this.options)
+        this.panelInsert = new Panel(this.$root, '#header-insert', 'insert', this.options)
+        this.panelFormat = new Panel(this.$root, '#header-format', 'format', this.options)
 
         this.$on('toolbar:tap', () => {
             this.closeAllPanels()
@@ -46,6 +49,14 @@ export class HeaderComponent extends ExcelComponent {
 
         this.$on('table:click', () => {
             this.closeAllPanels()
+        })
+
+        this.$on('table:init', ($cell) => {
+            this.selected = $cell
+        })
+
+        this.$on('table:select', ($cell) => {
+            this.selected = $cell
         })
     }
 
@@ -82,10 +93,6 @@ export class HeaderComponent extends ExcelComponent {
                                     <span class="panel_menu-item" data-panel="copie_file">Create copie</span> 
                                 </li>
                                 <div class="border"></div>
-                                <li class="row" data-panel="share">
-                                    <span class="material-icons" data-panel="share">share</span>
-                                    <span class="panel_menu-item" data-panel="share">Share</span> 
-                                </li>
                                 <li class="row" data-panel="download">
                                     <span class="material-icons" data-panel="download">download</span>
                                     <span class="panel_menu-item" data-panel="download">Download</span> 
@@ -99,24 +106,11 @@ export class HeaderComponent extends ExcelComponent {
                                     <span class="material-icons" data-panel="delete_file">delete</span>
                                     <span class="panel_menu-item" data-panel="delete_file">Delete</span> 
                                 </li>
-                                <li class="row" data-panel="print">
-                                    <span class="material-icons" data-panel="print">print</span>
-                                    <span class="panel_menu-item" data-panel="print">Print</span> 
-                                </li>
                             </ul>
                         </li>
                         <li id="header-edit">
                             <span class="panel_item" data-select="edit">Edit</span>   
                             <ul class="panel_menu hide">
-                                <li class="row" data-panel="undo">
-                                    <span class="material-icons" data-panel="undo">undo</span>
-                                    <span class="panel_menu-item" data-panel="undo">Undo</span> 
-                                </li>
-                                <li class="row" data-panel="redo">
-                                    <span class="material-icons" data-panel="redo">redo</span>
-                                    <span class="panel_menu-item" data-panel="redo">Redo</span> 
-                                </li>
-                                <div class="border"></div>
                                 <li class="row" data-panel="cut_content">
                                     <span class="material-icons" data-panel="cut_content">content_cut</span>
                                     <span class="panel_menu-item" data-panel="cut_content">Cut</span> 
@@ -202,9 +196,6 @@ export class HeaderComponent extends ExcelComponent {
                                 </li>
                             </ul>
                         </li>
-                        <li>
-                            <span class="panel_item" data-modal="help">Help</span>  
-                        </li>
                     </ul>
                 </div>
             </div>    
@@ -234,15 +225,15 @@ export class HeaderComponent extends ExcelComponent {
 
         if (this.panelFile.unfold) {
             if ($target.dataset('panel')) {
-                this.panelFile.operation($target.dataset('panel'))
+                this.panelFile.operation(this.selected, $target.dataset('panel'))
             }
         } else if (this.panelEdit.unfold) {
             if ($target.dataset('panel')) {
-                this.panelEdit.operation($target.dataset('panel'))
+                this.panelEdit.operation(this.selected, $target.dataset('panel'))
             }
         } else if (this.panelInsert.unfold) {
             if ($target.dataset('panel')) {
-                this.panelInsert.operation($target.dataset('panel'))
+                this.panelInsert.operation(this.selected, $target.dataset('panel'))
             }
         } else if (this.panelFormat.unfold_formatUl) {
             if ($target.dataset('format')) {
@@ -252,7 +243,7 @@ export class HeaderComponent extends ExcelComponent {
                     const parent = $target.closest('div')
                     item = parent.getChildByClass('material-icons')
                 }
-                this.panelFormat.operation(item.textContent)
+                this.panelFormat.operation(this.selected, item.textContent)
             }
         }
 
