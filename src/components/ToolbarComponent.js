@@ -211,11 +211,7 @@ export class ToolbarComponent extends ExcelComponent {
     render() {
         return `
         <div class="row">
-            <div class="file">
-                <span class="material-icons">undo</span>
-                <span class="material-icons">redo</span>
-                <span class="material-icons">print</span>
-            </div>
+            <div class="file"></div>
             <div class="font-types row">
                 <div class="fonts">
                     <div class="select" id="fonts-select">

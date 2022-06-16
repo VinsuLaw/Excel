@@ -2,16 +2,12 @@ import { Page } from "../core/Page";
 import { Excel } from '../core/Excel'
 import { createStore } from '../core/createStore'
 import { rootReducer } from '../store/rootReducer'
-import { storage, debounce } from '../core/utils'
+import { storage, debounce, storageName } from '../core/utils'
 import { initialState, normalizeInitialState } from '../store/initialState'
 import { HeaderComponent } from '../components/HeaderComponent/HeaderComponent'
 import { ToolbarComponent } from '../components/ToolbarComponent'
 import { FormulaComponent } from '../components/FormulaComponent'
 import { TableComponent } from '../components/TableComponent/TableComponent'
-
-function storageName(param) {
-    return 'excel:' + param
-}
 
 export class ExcelPage extends Page {
     getRoot() {

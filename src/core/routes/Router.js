@@ -26,7 +26,16 @@ export class Router {
         }
         this.$placeholder.clear()
 
-        const Page = ActiveRoute.path.includes('excel') ? this.routes.excel : this.routes.dashboard
+        let Page
+        ActiveRoute.path.includes('excel') ? this.routes.excel : this.routes.dashboard
+        if (ActiveRoute.path.includes('excel')) {
+            Page = this.routes.excel
+        } else if (ActiveRoute.path.includes('dump')) {
+            Page = this.routes.dump
+        } else {
+            Page = this.routes.dashboard
+        }
+        
         this.page = new Page(ActiveRoute.param)
         this.$placeholder.append(this.page.getRoot())
 

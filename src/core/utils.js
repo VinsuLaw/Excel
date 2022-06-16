@@ -37,6 +37,10 @@ export function storage(key, data = null) {
     localStorage.setItem(key, JSON.stringify(data))
 }
 
+export function storageName(param) {
+    return 'excel:' + param
+}
+
 export function removepx(data) {
     return parseInt(data.replace('px', ''))
 }

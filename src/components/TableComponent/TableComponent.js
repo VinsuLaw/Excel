@@ -6,6 +6,7 @@ import { TableSelection } from "./TableSelection";
 import * as actions from "../../store/actions"
 import { renderFromStorage } from "./render.storage";
 import { parse } from "../../core/parse";
+import { ActiveRoute } from "../../core/routes/ActiveRoute";
 
 export class TableComponent extends ExcelComponent {
     static PARENT_NODE = 'excel__table'
@@ -18,12 +19,20 @@ export class TableComponent extends ExcelComponent {
         })
         this.$root = $root
         this.state = this.store.getState()
-        this.rowsCount = 20
-        this.selection = new TableSelection(this.$root, this.rowsCount, options)
+        this.rowsCount = 25
         this.usageFormats = []
+        this.selection = new TableSelection(this.$root, this.rowsCount, options)
     }
 
     init() {
+        if (ActiveRoute.path.includes('dump')) {
+            this.$root.css({
+                top: 0,
+            })
+            renderFromStorage(this.$root, this.state)
+            return
+        }
+
         super.init()
 
         const $cell = $(this.$root.findElement(`[data-col="0:0"]`))
