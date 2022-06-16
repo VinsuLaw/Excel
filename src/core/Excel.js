@@ -1,9 +1,11 @@
+import { updateDate } from "../store/actions"
 import { $ } from "./DOM"
 import { Emitter } from "./Emitter"
+import { preventDefault } from "./utils"
 
 export class Excel {
-    constructor($selector, options) {
-        this.$el = $($selector)
+    constructor(selector, options) {
+        this.$el = $(document.querySelector(selector))
         this.components = options.components || []
         this.store = options.store
         this.emitter = new Emitter()
@@ -12,7 +14,7 @@ export class Excel {
     register() {
         const excel = document.createElement('div')
         excel.classList.add('excel')
-        this.$el.$el.append(excel)
+        this.$el.append(excel)
 
         const componentOptions = {
             emitter: this.emitter,
@@ -31,11 +33,13 @@ export class Excel {
 
             return component
         })
+
+        return excel
     }
 
     // Register, rendering and starting each component
     initial() {
-        this.register()
+        this.store.dispatch(updateDate())
         this.components.forEach(component => component.init())
     }
 

@@ -186,14 +186,6 @@
     & .events {
         @include icon(green);
 
-        &:last-child {
-            @include icon(#ff0000); 
-
-            &:active {
-                background-color: #fce5cd;
-            }
-        }
-
         &:active {
             background-color: $active-bg;
         }
