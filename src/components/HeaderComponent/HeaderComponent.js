@@ -5,6 +5,7 @@ import { debounce } from "../../core/utils";
 import img from "../../img/sheets_doc.png"
 import { changeTitle, favorite } from "../../store/actions";
 import { Panel } from "./Panel";
+import { ActiveRoute } from "../../core/routes/ActiveRoute";
 
 export class HeaderComponent extends ExcelComponent {
     static PARENT_NODE = 'excel__header'
@@ -209,8 +210,8 @@ export class HeaderComponent extends ExcelComponent {
             </div>    
                 
             <div class="row">
-                <span class="material-icons events">save</span>
-                <span class="material-icons events">exit_to_app</span>
+                <span class="material-icons events" data-button="delete">delete</span>
+                <span class="material-icons events" data-button="exit">exit_to_app</span>
             </div>
         `
     }
@@ -288,6 +289,16 @@ export class HeaderComponent extends ExcelComponent {
         } else {
             this.closeAllPanels()
         }
+
+        if ($target.dataset('button') === 'delete') {
+            const decision = confirm('Do you really want to delete this table?')
+            if (decision) {
+                localStorage.removeItem('excel:' + ActiveRoute.param)
+                ActiveRoute.navigate('')
+            }
+        } else if ($target.dataset('button') === 'exit') {
+            ActiveRoute.navigate('')
+        } 
     }
 
     onInput(event) {

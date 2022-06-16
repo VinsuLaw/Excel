@@ -111,6 +111,20 @@ class DOM {
         return document.createElement(tagName)
     }
 
+    append(node) {
+        if (node instanceof DOM) {
+            node = node.$el
+        }
+
+        if (Element.prototype.append) {
+            this.$el.append(node)
+        } else {
+            this.$el.appendChild(node)
+        }
+
+        return this
+    }
+
     destroy() {
         this.$el.remove()
     }
@@ -125,6 +139,12 @@ class DOM {
 
     innerHTML(content) {
         this.$el.innerHTML = content
+        return this.$el
+    }
+
+    clear() {
+        this.innerHTML('')
+        return this
     }
 
     text(text) {
@@ -159,4 +179,12 @@ class DOM {
 
 export function $(selector) {
     return new DOM(selector)
+}
+
+$.create = (tagName, classes = '') => {
+    const el = document.createElement(tagName)
+    if (classes) {
+        el.classList.add(classes)
+    }
+    return $(el)
 }
