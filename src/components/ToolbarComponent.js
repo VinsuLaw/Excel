@@ -344,6 +344,8 @@ export class ToolbarComponent extends ExcelComponent {
     onClick(event) {
         this.$target = $(event.target)
 
+        this.$emit('toolbar:tap')
+
         if (this.$target.dataset('format')) {
             if (this.$target.hasClass('active')) {
                 this.$target.removeClass(['active'])

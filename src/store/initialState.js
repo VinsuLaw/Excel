@@ -3,6 +3,7 @@ import { DEFAULT_TITLE } from "../index"
 
 const defaultState = {
     appTitle: DEFAULT_TITLE,
+    favorite: false,
     rowState: {},
     colState: {},
     formatTypes: {},

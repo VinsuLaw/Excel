@@ -1,4 +1,4 @@
-import { TABLE_RESIZE, TOOL_ALIGN, TOOL_FORMATS, TOOL_COLOR, TOOL_FONT, CHANGE_TEXT, CHANGE_TITLE } from "./types"
+import { TABLE_RESIZE, TOOL_ALIGN, TOOL_FORMATS, TOOL_COLOR, TOOL_FONT, CHANGE_TEXT, CHANGE_TITLE, FAVORITES } from "./types"
 
 export function rootReducer(state, action) {
     let prevState
@@ -47,6 +47,8 @@ export function rootReducer(state, action) {
             return {...state, currentText: action.data.all.text, dataState: prevState}
         case CHANGE_TITLE: 
             return {...state, appTitle: action.data}
+        case FAVORITES:
+            return {...state, favorite: action.data}
         default: return state
     }
 }
