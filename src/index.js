@@ -1,5 +1,5 @@
 import { Excel } from './core/Excel'
-import { HeaderComponent } from './components/HeaderComponent'
+import { HeaderComponent } from './components/HeaderComponent/HeaderComponent'
 import { ToolbarComponent } from './components/ToolbarComponent'
 import { FormulaComponent } from './components/FormulaComponent'
 import { TableComponent } from './components/TableComponent/TableComponent'
@@ -14,7 +14,6 @@ export const DEFAULT_TITLE = 'New table'
 const store = createStore(rootReducer, initialState)
 
 const stateListener = debounce(state => {
-    console.log(state)
     storage('excel-state', state)
 }, 500)
 

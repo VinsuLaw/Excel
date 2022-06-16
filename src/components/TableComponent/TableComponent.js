@@ -41,9 +41,12 @@ export class TableComponent extends ExcelComponent {
         })
         
         this.$on('formula:input', (text) => {
-            this.selection.current
-                .attr('data-value', text)
-                .text(parse(text))
+            this.selection.current.attr('data-value', text)
+            if (text.startsWith('=')) {
+                this.selection.current.textForParse(parse(text))
+            } else {
+                this.selection.current.text(text)
+            }
             this.updateTextWithFormula(text, null)
         })
 
@@ -282,6 +285,7 @@ export class TableComponent extends ExcelComponent {
             this.selection.current.removeAttribute('style')
             this.selection.current.removeDataset('link')
         }
+        this.selection.current.attr('data-value', this.selection.current.text())
         this.updateTextWithFormula($(event.target).text(), null)
     }
 

@@ -22,6 +22,10 @@ class DOM {
         return Array.from(this.$el.childNodes).filter(node => node.className === selector)[0]
     }
 
+    getChildByTagName(tag) {
+        return Array.from(this.$el.childNodes).filter(node => node.tagName === tag)[0]
+    }
+
     getCoords() {
         return this.$el.getBoundingClientRect()
     }
@@ -77,7 +81,7 @@ class DOM {
     }
 
     attr(name, value) {
-        if (value) {
+        if (value || value === '') {
             this.$el.setAttribute(name, value)
             return this
         } else {
@@ -124,12 +128,18 @@ class DOM {
     }
 
     text(text) {
-        if (typeof text !== 'undefined') {
+        if (typeof text === 'string') {
             this.$el.textContent = text
             return this
         }
 
         return this.$el.textContent.trim()
+    }
+
+    textForParse(text) {
+        if (typeof text !== 'undefined') {
+            this.$el.textContent = text
+        }
     }
 
     value(text) {
